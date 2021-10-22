@@ -1,31 +1,49 @@
 import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
-
+import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import '../styles/index.styles.css'
 
-const IndexPage = () => (
-  <Layout>
-    <Seo title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <StaticImage
-      src="../images/gatsby-astronaut.png"
-      width={300}
-      quality={95}
-      formats={["auto", "webp", "avif"]}
-      alt="A Gatsby astronaut"
-      style={{ marginBottom: `1.45rem` }}
-    />
-    <p>
-      <Link to="/page-2/">Go to page 2</Link> <br />
-      <Link to="/using-typescript/">Go to "Using TypeScript"</Link> <br />
-      <Link to="/using-ssr">Go to "Using SSR"</Link> <br />
-      <Link to="/using-dsg">Go to "Using DSG"</Link>
-    </p>
-  </Layout>
-)
+export default ({ data }) => {
+  return (
+    <Layout>
+      <Seo title="Home" />
+      <div>
+        <h1>
+          Meus Posts
+        </h1>
+        <div className='posts-grid'>
+          {data.allMarkdownRemark.edges.map(({ node }) => (
+            <div className='post' key={ node.id }>
+              <Link to={node.fields.slug}>
+                <span>{ node.frontmatter.title } - <small>{ node.frontmatter.date }</small></span>
+              </Link>
+              <p>{ node.excerpt }</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Layout>
+  )
+} 
 
-export default IndexPage
+export const query = graphql`
+  query {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC}) {
+      totalCount
+      edges {
+        node {
+          frontmatter {
+            date
+            description
+            title
+          }
+          fields {
+            slug
+          }
+          excerpt
+        }
+      }
+    }
+  }
+`

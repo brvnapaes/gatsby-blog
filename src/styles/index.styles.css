@@ -1,0 +1,24 @@
+* {
+    font-family: sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+span {
+    font-size: 32px;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 40px;
+}
+
+.post {
+    width: auto;
+    height: 200px;
+}
